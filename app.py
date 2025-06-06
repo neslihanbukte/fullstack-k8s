@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, Response
 import sqlite3
 import os
 import random
@@ -12,7 +12,7 @@ def init_db():
         conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
         c.execute("CREATE TABLE entries (id INTEGER PRIMARY KEY AUTOINCREMENT, value TEXT)")
-        c.execute("INSERT INTO entries (value) VALUES ('first entry' )")
+        c.execute("INSERT INTO entries (value) VALUES ('first entry')")
         conn.commit()
         conn.close()
 
@@ -30,8 +30,14 @@ def home():
 
 @app.route("/metrics")
 def metrics():
-    number = random.randint(0,100)
-    return jsonify({"metric" : number})
+    number = random.randint(0, 100)
+
+    
+    metric_output = f"""# HELP demo_app_random_metric A random metric for demo
+# TYPE demo_app_random_metric gauge
+demo_app_random_metric {number}
+"""
+    return Response(metric_output, mimetype="text/plain")
 
 if __name__ == "__main__":
     init_db()

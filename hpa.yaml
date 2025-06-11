@@ -2,6 +2,7 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: demo-app-hpa
+  namespace: demo-ns
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -10,10 +11,10 @@ spec:
   minReplicas: 1
   maxReplicas: 5
   metrics:
-    - type: Pods
-      pods:
-        metric:
-          name: demo_app_random_metric
-        target:
-          type: AverageValue
-          averageValue: "50"
+  - type: Pods
+    pods:
+      metric:
+        name: app_requests_per_second
+      target:
+        type: AverageValue
+        averageValue: "0.1"

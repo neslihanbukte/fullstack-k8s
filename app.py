@@ -9,7 +9,7 @@ app = Flask(__name__)
 DB_PATH = "data.db"
 POD_NAME = socket.gethostname()
 
-# Basit bir sayaç (uygulama yeniden başlarsa sıfırlanır)
+
 request_count = 0
 
 def init_db():

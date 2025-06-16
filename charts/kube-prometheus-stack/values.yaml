@@ -4339,7 +4339,7 @@ prometheus:
         fallback_scrape_protocol: PrometheusText0.0.4
         static_configs:
           - targets:
-              - demo-app-service.demo-ns.svc.cluster.local:5000
+              - demo-app-service.demo-ns.svc.cluster.local:80
 
     # - job_name: kube-etcd
     #   kubernetes_sd_configs:

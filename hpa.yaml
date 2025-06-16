@@ -14,7 +14,7 @@ spec:
   - type: Pods
     pods:
       metric:
-        name: app_requests_per_second
+        name: app_requests_total
       target:
         type: AverageValue
         averageValue: "0.1"

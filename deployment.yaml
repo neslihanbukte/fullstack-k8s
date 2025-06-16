@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: demo-app-deployment
-  namespace: demo-ns
 spec:  
   replicas: 2
   selector:
@@ -15,7 +14,7 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/path: "/metrics"
-        prometheus.io/port: "5000"
+        prometheus.io/port: "80"
     spec:
       affinity:
        podAntiAffinity:
@@ -32,3 +31,4 @@ spec:
         image: neslihanbukte/demo-app:latest
         ports:
         - containerPort: 5000
+          name: http

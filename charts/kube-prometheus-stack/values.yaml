@@ -4446,10 +4446,10 @@ prometheus:
     ## https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api-reference/api.md
     ##
     securityContext:
-      runAsGroup: 2000
+      runAsGroup: 0
       runAsNonRoot: true
-      runAsUser: 1000
-      fsGroup: 2000
+      runAsUser: 0
+      fsGroup: 0
       seccompProfile:
         type: RuntimeDefault
 

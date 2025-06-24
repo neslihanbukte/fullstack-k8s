@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: demo-app-deployment
 spec:  
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: demo-app
@@ -17,18 +17,34 @@ spec:
         prometheus.io/port: "80"
     spec:
       affinity:
-       podAntiAffinity:
-         requiredDuringSchedulingIgnoredDuringExecution:
-           - labelSelector:
-               matchExpressions:
-                 - key: app
-                   operator: In
-                   values:
-                     - demo-app
-             topologyKey: "kubernetes.io/hostname"
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - demo-app
+              topologyKey: "kubernetes.io/hostname"
+      volumes:
+        - name: config-volume
+          emptyDir: {}
+      initContainers:
+        - name: fetch-greeting-message
+          image: bitnami/kubectl:latest
+          command: ["sh", "-c"]
+          args:
+            - >
+              kubectl get myappconfig myappconfig-sample -o jsonpath='{.spec.greetingMessage}' > /config/greeting.txt
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config
       containers:
-      - name: demo-app-container
-        image: neslihanbukte/demo-app:latest
-        ports:
-        - containerPort: 5000
-          name: http
+        - name: demo-app-container
+          image: neslihanbukte/demo-app:latest
+          ports:
+            - containerPort: 5000
+              name: http
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config

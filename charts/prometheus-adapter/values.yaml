@@ -140,12 +140,15 @@ rules:
   - seriesQuery: 'app_requests_total{namespace!="",pod!=""}'
     resources:
       overrides:
-        namespace: {resource: "namespace"}
-        pod: {resource: "pod"}
+        namespace:
+          resource: "namespace"
+        pod:
+          resource: "pod"
     name:
-      matches: "^app_requests_total"
+      matches: "^app_requests_total$"
       as: "app_requests_per_second"
-    metricsQuery: 'rate(<<.Series>>{<<.LabelMatchers>>}[2m])'
+    metricsQuery: 'sum(rate(<<.Series>>{<<.LabelMatchers>>}[2m])) by (pod)'
+
 
   existing:
 

@@ -2,13 +2,12 @@ from flask import Flask, jsonify, Response
 import sqlite3
 import os
 import socket
-import time
 
 app = Flask(__name__)
 
 DB_PATH = "data.db"
 POD_NAME = socket.gethostname()
-
+GREETING_FILE_PATH = "/config/greeting.txt"  
 
 request_count = 0
 
@@ -21,19 +20,26 @@ def init_db():
         conn.commit()
         conn.close()
 
+def get_greeting_message():
+    try:
+        with open(GREETING_FILE_PATH, "r") as f:
+            return f.read().strip()
+    except:
+        return "Default Greeting"
+
 @app.route("/")
 def home():
     global request_count
     request_count += 1
-    
+
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute("SELECT * FROM entries ORDER BY id DESC LIMIT 1")
     row = c.fetchone()
     conn.close()
-    
+
     return jsonify({
-        "message": "Hello from Demo-App!",
+        "message": get_greeting_message(),
         "last_entry": {"id": row[0], "value": row[1]} if row else None
     })
 

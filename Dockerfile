@@ -6,4 +6,4 @@ COPY app.py .
 RUN mkdir -p /data
 COPY data.db /data/data.db
 EXPOSE 5000
-CMD ["python3", "app.py"]
+CMD ["python3", "app/app.py"]

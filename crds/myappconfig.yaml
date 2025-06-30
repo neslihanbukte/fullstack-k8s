@@ -1,6 +1,7 @@
-apiVersion: stable.example.com/v1
+apiVersion: example.com/v1
 kind: MyAppConfig
 metadata:
   name: demo-app-config
+  namespace: demo-app
 spec:
   greetingMessage: "hellooo devopsss"

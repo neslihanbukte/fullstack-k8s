@@ -1,0 +1,34 @@
+# sqlite-deploy.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sqlite-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sqlite-test
+  template:
+    metadata:
+      labels:
+        app: sqlite-test
+    spec:
+      containers:
+      - name: sqlite
+        image: alpine
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            apk add sqlite;
+            if [ ! -f /data/db.sqlite ]; then
+              echo "CREATE TABLE test (id INTEGER PRIMARY KEY, value TEXT);" | sqlite3 /data/db.sqlite;
+              echo "INSERT INTO test (value) VALUES ('hello');" | sqlite3 /data/db.sqlite;
+            fi;
+            sleep 3600;
+        volumeMounts:
+        - name: sqlite-volume
+          mountPath: /data
+      volumes:
+      - name: sqlite-volume
+        persistentVolumeClaim:
+          claimName: sqlite-pvc

@@ -6,13 +6,13 @@ spec:
   podSelector:
     matchLabels:
       role: backend
-  ingress:
-  - from:
-    - podSelector:
-        matchLabels:
-          role: frontend
-    ports:
-    - protocol: TCP
-      port: 5678
   policyTypes:
-  - Ingress
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              role: frontend
+      ports:
+        - protocol: TCP
+          port: 80

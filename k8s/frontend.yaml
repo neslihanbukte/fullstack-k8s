@@ -1,21 +1,11 @@
-# frontend-deploy.yaml
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Pod
 metadata:
   name: frontend
   labels:
-    app: frontend
+    role: frontend
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: frontend
-  template:
-    metadata:
-      labels:
-        app: frontend
-    spec:
-      containers:
-      - name: busybox
-        image: busybox
-        command: ["sleep", "3600"]
+  containers:
+  - name: frontend
+    image: busybox
+    command: ["sleep", "3600"]

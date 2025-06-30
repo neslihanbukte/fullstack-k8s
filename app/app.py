@@ -5,7 +5,7 @@ import socket
 
 app = Flask(__name__)
 
-DB_PATH = "data.db"
+DB_PATH = "/data/db.sqlite"
 POD_NAME = socket.gethostname()
 GREETING_FILE_PATH = "/config/greeting.txt"  
 

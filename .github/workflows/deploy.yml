@@ -10,24 +10,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Reposoyu klonla
+    - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Docker’a login ol
+    - name: Log in to Docker Hub
       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-    - name: Docker image’ı build et
+    - name: Build Docker image
       run: docker build -t ${{ secrets.DOCKER_USERNAME }}/demo-app:${{ github.sha }} .
 
-    - name: Docker image’ı push et
+    - name: Push Docker image to Docker Hub
       run: docker push ${{ secrets.DOCKER_USERNAME }}/demo-app:${{ github.sha }}
 
-    - name: Kubeconfig dosyasını oluştur
+    - name: Configure kubeconfig
       run: |
         echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > kubeconfig
         echo "KUBECONFIG=$PWD/kubeconfig" >> $GITHUB_ENV
 
-    - name: Kubernetes deployment'ı image ile güncelle
+    - name: Update image and rollout deployment
       run: |
         kubectl set image deployment/demo-app-deployment demo-app-container=${{ secrets.DOCKER_USERNAME }}/demo-app:${{ github.sha }}
         kubectl rollout status deployment/demo-app-deployment
